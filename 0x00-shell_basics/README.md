@@ -42,3 +42,5 @@ The listing should be alpha ordered, except for the directories . and .. which s
 Only digits and letters are used to sort; Digits should come first
 You can assume that all the files we will test with will have at least one letter or one digit
 The listing should end with a new line
+19. File type: Holberton #advanced
+Create a magic file holberton.mgc that can be used with the command file to detect Holberton data files. Holberton data files always contain the string HOLBERTON at offset 0.
