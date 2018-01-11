@@ -37,3 +37,8 @@ Write a script that changes the owner to betty and the group owner to holberton 
 Write a script that changes the owner and the group owner of the file _hello to betty and holberton respectively.
 16. If only mandatory
 Write a script that changes the owner of the file hello to betty only if it is owned by the user guillaume.
+17. Star Wars #advanced
+Write a script that will play the StarWars IV episode in the terminal.
+18. RTFM #advanced
+Create a man that looks exactly like this one and passes all checks.
+
