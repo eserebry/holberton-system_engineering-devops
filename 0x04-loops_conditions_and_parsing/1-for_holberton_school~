@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+i=0
+$i
+for i in {0..10}
+    do
+	echo "Holberton School"
+done
