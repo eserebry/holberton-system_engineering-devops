@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#displays Holberton School 10 times using for loop
+# This script is displaying "Holberton School" 10 times
 i=1
 $i
 for i in {1..10}
