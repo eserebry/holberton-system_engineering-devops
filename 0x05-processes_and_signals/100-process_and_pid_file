@@ -4,11 +4,11 @@
 #Displays I hate the kill command when receiving a SIGTERM signal
 #Displays Y U no love me?! when receiving a SIGINT signal
 #Deletes the file /var/run/holbertonscript.pid and terminate itself when receiving a SIGQUIT or SIGTERM signal
-pgrep -f 100-process_and_pid_file > /var/run/holbertonscript.pid
+echo $$ > /var/run/holbertonscript.pid
 trap "echo I am invincible!!!" SIGTERM
 trap "echo Y U no love me?!" SIGINT
-trap "sudo -rm -rf /var/run/holbertonscript.pid | pkill -SIGKILL -f 100-process_and_pid_file" SIGQUIT
-trap "sudo -rm -rf /var/run/holbertonscript.pid | pkill -SIGKILL -f 100-process_and_pid_file" SIGTERM
+trap "sudo rm -f /var/run/holbertonscript.pid | pkill -SIGKILL -f 100-process_and_pid_file" SIGQUIT
+trap "sudo rm -f /var/run/holbertonscript.pid | pkill -SIGKILL -f 100-process_and_pid_file" SIGTERM
 i=0
 while ((i >= 0))
 do
