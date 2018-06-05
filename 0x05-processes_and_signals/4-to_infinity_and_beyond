@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#displays its PID
+#displays To infinity and beyond indefinitely.
 i=0
 while ((i >= 0))
 do
