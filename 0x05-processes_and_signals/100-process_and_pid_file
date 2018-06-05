@@ -7,8 +7,8 @@
 echo $$ > /var/run/holbertonscript.pid
 trap "echo I am invincible!!!" SIGTERM
 trap "echo Y U no love me?!" SIGINT
-trap "sudo rm -f /var/run/holbertonscript.pid | pkill -SIGKILL -f 100-process_and_pid_file" SIGQUIT
-trap "sudo rm -f /var/run/holbertonscript.pid | pkill -SIGKILL -f 100-process_and_pid_file" SIGTERM
+trap "sudo rm -f /var/run/holbertonscript.pid; exit" SIGQUIT
+trap "sudo rm -f /var/run/holbertonscript.pid; exit" SIGTERM
 i=0
 while ((i >= 0))
 do
