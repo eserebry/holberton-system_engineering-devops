@@ -6,6 +6,6 @@ echo "Holberton School" | sudo tee /usr/share/nginx/html/index.html
 page="location /redirect_me {rewrite ^/redirect_me(.*)$ https://www.youtube.com/watch?v=QH2-TGUlwu4/$1 permanent;}"
 sudo sed -i "30i $page" /etc/nginx/sites-available/default
 echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html
-error_page="error_page 404 /404.html; location = /404.html {root /usr/share/nginx/html/; internal}"
+error_page="error_page 404 /404.html; location = /404.html {root /usr/share/nginx/html/; internal;}"
 sudo sed -i "44i $error_page" /etc/nginx/sites-available/default
 sudo service nginx restart
