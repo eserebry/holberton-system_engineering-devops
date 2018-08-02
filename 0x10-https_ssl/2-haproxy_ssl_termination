@@ -21,12 +21,31 @@ defaults
         errorfile 502 /etc/haproxy/errors/502.http
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
+
 frontend web-frontend
         bind *:80
         mode http
         default_backend web-backend
 
+frontend www-https
+        # Bind 443 with the generated letsencrypt cert.
+        bind *:443 ssl crt /etc/haproxy/certs/elenaserebryakova.webcite.pem
+        # set x-forward to https
+        reqadd X-Forwarded-Proto:\ https
+        # set X-SSL in case of ssl_fc <- explained below
+        http-request set-header X-SSL %[ssl_fc]
+        # Select a Challenge
+        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+        # Use the challenge backend if the challenge is set
+        use_backend letsencrypt-backend if letsencrypt-acl
+        default_backend web-backend
+
 backend web-backend
+        # Redirect with code 301 so the browser understands it is a redirect. If it's not SSL_FC.
+        # ssl_fc: Returns true when the front connection was made via an SSL/TLS transport
+        # layer and is locally deciphered. This means it has matched a socket declared
+        # with a "bind" line having the "ssl" option.
+        redirect scheme https code 301 if !{ ssl_fc }
         balance roundrobin
         server 356-web-01 104.196.57.225:80 check
         server 356-web-02 35.231.8.144:80 check
