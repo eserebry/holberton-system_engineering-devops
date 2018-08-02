@@ -2,18 +2,32 @@ global
         log /dev/log    local0
         log /dev/log    local1 notice
         chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin
+        stats timeout 30s
         user haproxy
         group haproxy
         daemon
+        maxconn 2048
+        tune.ssl.default-dh-param 2048
+
+        # Default SSL material locations
+        ca-base /etc/ssl/certs
+        crt-base /etc/ssl/private
+
+        # Default ciphers to use on SSL-enabled listening sockets.
+        # For more information, see ciphers(1SSL). This list is from:
+        #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
+        ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNUL$
+        ssl-default-bind-options no-sslv3
 
 defaults
         log     global
         mode    http
         option  httplog
         option  dontlognull
-        contimeout 5000
-        clitimeout 50000
-        srvtimeout 50000
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
         errorfile 400 /etc/haproxy/errors/400.http
         errorfile 403 /etc/haproxy/errors/403.http
         errorfile 408 /etc/haproxy/errors/408.http
@@ -21,31 +35,28 @@ defaults
         errorfile 502 /etc/haproxy/errors/502.http
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
+        option forwardfor
+        option http-server-close
 
-frontend web-frontend
+frontend http_front
         bind *:80
         mode http
-        default_backend web-backend
+        reqadd X-Forwarded-Proto:\ http
+        default_backend http_back
 
 frontend www-https
-        # Bind 443 with the generated letsencrypt cert.
-        bind *:443 ssl crt /etc/haproxy/certs/elenaserebryakova.webcite.pem
-        # set x-forward to https
+        bind *:443 ssl crt /etc/haproxy/certs/www.elenaserebryakova.website.pem
         reqadd X-Forwarded-Proto:\ https
-        # set X-SSL in case of ssl_fc <- explained below
-        http-request set-header X-SSL %[ssl_fc]
-        # Select a Challenge
         acl letsencrypt-acl path_beg /.well-known/acme-challenge/
-        # Use the challenge backend if the challenge is set
         use_backend letsencrypt-backend if letsencrypt-acl
-        default_backend web-backend
+        default_backend http_back
 
-backend web-backend
-        # Redirect with code 301 so the browser understands it is a redirect. If it's not SSL_FC.
-        # ssl_fc: Returns true when the front connection was made via an SSL/TLS transport
-        # layer and is locally deciphered. This means it has matched a socket declared
-        # with a "bind" line having the "ssl" option.
-        redirect scheme https code 301 if !{ ssl_fc }
+backend http_back
+        mode http
         balance roundrobin
+        option forwardfor
         server 356-web-01 104.196.57.225:80 check
         server 356-web-02 35.231.8.144:80 check
+
+backend letsencrypt-backend
+        server letsencrypt 127.0.0.1:54321
