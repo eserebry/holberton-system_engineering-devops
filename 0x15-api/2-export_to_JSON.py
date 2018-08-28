@@ -22,7 +22,7 @@ def todo_json():
                      "completed": task.get("completed"),
                      "username": name}
             data[user_id].append(tasks)
-        json.dumps(data, jsonfile)
+        json.dump(data, jsonfile)
 
 if __name__ == "__main__":
     todo_json()
