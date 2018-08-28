@@ -7,7 +7,7 @@ import requests
 import sys
 
 
-def todo_json():
+def todo_all_json():
     ''' exports data in the JSON format.'''
     user_id = sys.argv[1]
     user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
@@ -33,4 +33,4 @@ def todo_json():
         json.dump(data, jsonfile)
 
 if __name__ == "__main__":
-    todo_json()
+    todo_all_json()
