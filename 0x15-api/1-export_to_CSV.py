@@ -14,11 +14,11 @@ def todo_csv():
                         .format(user_id)).json()
     todo = requests.get("https://jsonplaceholder.typicode.com/todos?userId={}"
                         .format(user_id)).json()
-    name = user.get("name")
+    name = user.get("username")
     with open("{}.csv".format(user_id), "w", newline="") as csvfile:
         file = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
         for task in todo:
-            file.writerow([user_id, user.get("username"),
+            file.writerow([user_id, name,
                            task.get("completed"), task.get("title")])
 
 if __name__ == "__main__":
