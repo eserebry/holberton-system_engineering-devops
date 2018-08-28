@@ -7,6 +7,7 @@ import requests
 
 
 def todo():
+    ''' returns information about user TODO list progress'''
     user_id = sys.argv[1]
     user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
                         .format(user_id)).json()
