@@ -7,7 +7,7 @@ import requests
 import sys
 
 
-def todo_all_json():
+def todo_json():
     ''' exports data in the JSON format.'''
     user_id = sys.argv[1]
     user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
@@ -15,16 +15,8 @@ def todo_all_json():
     todo = requests.get("https://jsonplaceholder.typicode.com/todos?userId={}"
                         .format(user_id)).json()
     name = user.get("username")
-    filename = "todo_all_employees.json"
-    all_dict = {}
-    user_dict = {}
-
-    with open(filename, "w") as jsonfile:
+    with open("{}.json".format(user_id), "w") as jsonfile:
         data = {user_id: []}
-        for us in user:
-            us = {us_id = user.get("id")
-                  all_us[us_id] = []
-                  user_dic[us_id] = us.get("username")}
         for task in todo:
             tasks = {"task": task.get("title"),
                      "completed": task.get("completed"),
@@ -33,4 +25,4 @@ def todo_all_json():
         json.dump(data, jsonfile)
 
 if __name__ == "__main__":
-    todo_all_json()
+    todo_json()
