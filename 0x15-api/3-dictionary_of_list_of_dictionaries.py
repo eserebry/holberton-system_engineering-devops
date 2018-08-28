@@ -24,8 +24,7 @@ def todo_json():
         for us in user:
             us = {us_id = user.get("id")
                   all_us[us_id] = []
-                  user_dic[us_id] = us.get("username")
-            }
+                  user_dic[us_id] = us.get("username")}
         for task in todo:
             tasks = {"task": task.get("title"),
                      "completed": task.get("completed"),
